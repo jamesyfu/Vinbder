@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Sword, RefreshCw, Bookmark, Zap, Skull, Heart, DoorOpen, ArrowRight, CheckCircle } from 'lucide-react';
 import { clsx } from 'clsx';
