@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cinder-black: #050505;
+  --color-cinder-orange: #ff5500;
+  --color-cinder-red: #ff3333;
+  --color-cinder-blue: #3388ff;
+}
+
+body {
+  background-color: var(--color-cinder-black);
+  color: white;
+  font-family: 'Courier New', Courier, monospace; /* Tech/Terminal feel */
+}
