@@ -43,6 +43,7 @@ const CARD_POOL: Omit<Card, 'id'>[] = [
   { name: 'Iron Wall', type: 'BLOCK', value: 20, description: 'Gain 20 Block' },
   { name: 'Fortress', type: 'BLOCK', value: 30, cost: 4, description: 'Gain 30 Block (4 Ticks)' },
   { name: 'Inferno', type: 'ATTACK', value: 60, cost: 5, description: 'Deal 60 DMG (5 Ticks)' },
+  { name: 'Prepared Strike', type: 'ATTACK', value: 10, cost: 5, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
 ];
 
 const CAMPAIGN: EnemyDef[] = [
@@ -52,22 +53,20 @@ const CAMPAIGN: EnemyDef[] = [
 ];
 
 const INITIAL_DECK: Card[] = [
-  // { id: '1', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  // { id: '2', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  // { id: '3', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  // { id: '4', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  // { id: '5', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
-  // { id: '6', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
-  // { id: '7', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
-  // { id: '8', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
-  // { id: '9', name: 'Bash', type: 'ATTACK', value: 20, cost: 3, description: 'Deal 20 DMG (3 Ticks)' },
-  // { id: '10', name: 'Leech', type: 'ATTACK', value: 10, heal: 8, description: 'Deal 10 DMG + Heal 8' },
-  // { id: '11', name: 'Pyroblast', type: 'ATTACK', value: 40, cost: 4, description: 'Deal 40 DMG (4 Ticks)' },
-  // { id: '12', name: 'Iron Wall', type: 'BLOCK', value: 20, description: 'Gain 20 Block' },
-  { id: '1', name: 'Prepared Strike', type: 'ATTACK', value: 10, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
-  { id: '2', name: 'Prepared Strike', type: 'ATTACK', value: 10, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
-  { id: '3', name: 'Defend', type: 'BLOCK', value: 12, description: 'Gain 12 Block' },
-  { id: '4', name: 'Defend', type: 'BLOCK', value: 12, description: 'Gain 12 Block' },
+  { id: '1', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  { id: '2', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  { id: '3', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  { id: '4', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  { id: '5', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
+  { id: '6', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
+  { id: '7', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
+  { id: '8', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
+  { id: '9', name: 'Bash', type: 'ATTACK', value: 20, cost: 3, description: 'Deal 20 DMG (3 Ticks)' },
+  { id: '10', name: 'Leech', type: 'ATTACK', value: 10, heal: 8, description: 'Deal 10 DMG + Heal 8' },
+  { id: '11', name: 'Pyroblast', type: 'ATTACK', value: 40, cost: 4, description: 'Deal 40 DMG (4 Ticks)' },
+  { id: '12', name: 'Iron Wall', type: 'BLOCK', value: 20, description: 'Gain 20 Block' },
+  { id: '13', name: 'Prepared Strike', type: 'ATTACK', value: 10, cost: 5, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
+  { id: '14', name: 'Prepared Strike', type: 'ATTACK', value: 10, cost: 5, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
 ];
 
 // --- Utilities ---
