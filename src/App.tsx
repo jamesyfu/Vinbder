@@ -234,6 +234,15 @@ export default function App() {
       setPlayerBlock(0);
       setTicks(0);
       setHoldCard(null);
+      setShuffleCount(0);
+
+      for( let i = 0; i < deck.length; i++ )
+      {
+          if( deck[i].name === 'Prepared Strike' )
+          {
+              deck[i] = { ...deck[i], value: 10 };
+          }
+      }
       
       const initialIntent = { type: 'ATTACK', value: 8 + fightIndex * 2, duration: 15 } as Intent;
       setIntent(initialIntent);
