@@ -200,6 +200,9 @@ export default function App() {
   // Times shuffled this combat (for Prepared Strike buff)
   const [shuffleCount, setShuffleCount] = useState(0);
 
+  // Enemy action count
+  const [enemyActionCount, setEnemyActionCount] = useState(0);
+
   // --- Core Game Logic ---
 
   const addToLog = (msg: string) => {
@@ -235,6 +238,7 @@ export default function App() {
       setTicks(0);
       setHoldCard(null);
       setShuffleCount(0);
+      setEnemyActionCount(0);
 
       for( let i = 0; i < deck.length; i++ )
       {
@@ -275,6 +279,18 @@ export default function App() {
     const next = getNextIntent();
     setIntent(next);
     setMaxTicks(next.duration);
+
+    // Increment enemy action count and check for auto-defeat
+    // The enemy will automatically be defeated after 10 actions for faster gameplay
+    setEnemyActionCount(prev => prev + 1);
+    if (enemyActionCount >= 9)
+    {
+        setView(fightIndex >= CAMPAIGN.length - 1 ? 'VICTORY' : 'REWARD');
+        if (fightIndex < CAMPAIGN.length - 1) {
+            setRewards(generateRewards(currentEnemy.rewardCount));
+            setSelectedRewards([]);
+        }
+    }
   };
 
   // Combat Check
