@@ -52,18 +52,22 @@ const CAMPAIGN: EnemyDef[] = [
 ];
 
 const INITIAL_DECK: Card[] = [
-  { id: '1', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  { id: '2', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  { id: '3', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  { id: '4', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
-  { id: '5', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
-  { id: '6', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
-  { id: '7', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
-  { id: '8', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
-  { id: '9', name: 'Bash', type: 'ATTACK', value: 20, cost: 3, description: 'Deal 20 DMG (3 Ticks)' },
-  { id: '10', name: 'Leech', type: 'ATTACK', value: 10, heal: 8, description: 'Deal 10 DMG + Heal 8' },
-  { id: '11', name: 'Pyroblast', type: 'ATTACK', value: 40, cost: 4, description: 'Deal 40 DMG (4 Ticks)' },
-  { id: '12', name: 'Iron Wall', type: 'BLOCK', value: 20, description: 'Gain 20 Block' },
+  // { id: '1', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  // { id: '2', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  // { id: '3', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  // { id: '4', name: 'Strike', type: 'ATTACK', value: 12, description: 'Deal 12 DMG' },
+  // { id: '5', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
+  // { id: '6', name: 'Defend', type: 'BLOCK', value: 10, description: 'Gain 10 Block' },
+  // { id: '7', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
+  // { id: '8', name: 'Quick Shiv', type: 'ATTACK', value: 8, cost: 1, description: 'Deal 8 DMG (1 Tick)' },
+  // { id: '9', name: 'Bash', type: 'ATTACK', value: 20, cost: 3, description: 'Deal 20 DMG (3 Ticks)' },
+  // { id: '10', name: 'Leech', type: 'ATTACK', value: 10, heal: 8, description: 'Deal 10 DMG + Heal 8' },
+  // { id: '11', name: 'Pyroblast', type: 'ATTACK', value: 40, cost: 4, description: 'Deal 40 DMG (4 Ticks)' },
+  // { id: '12', name: 'Iron Wall', type: 'BLOCK', value: 20, description: 'Gain 20 Block' },
+  { id: '1', name: 'Prepared Strike', type: 'ATTACK', value: 10, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
+  { id: '2', name: 'Prepared Strike', type: 'ATTACK', value: 10, description: 'Deal 10 DMG. +10 DMG each time you shuffle with this card in hand.'},
+  { id: '3', name: 'Defend', type: 'BLOCK', value: 12, description: 'Gain 12 Block' },
+  { id: '4', name: 'Defend', type: 'BLOCK', value: 12, description: 'Gain 12 Block' },
 ];
 
 // --- Utilities ---
@@ -144,12 +148,12 @@ const CardComponent = ({
       <div className="flex justify-between items-start">
         <h3 className="font-bold text-lg tracking-wider uppercase truncate">{card.name}</h3>
         <div className="flex items-center gap-1">
-             <div className="flex items-center justify-center w-6 h-6 rounded-full bg-neutral-800 text-xs font-mono text-orange-500 border border-orange-900" title="Tick Cost">
+            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-neutral-800 text-xs font-mono text-orange-500 border border-orange-900" title="Tick Cost">
                 {cost}
-             </div>
-             <div className={cn("p-1 rounded-full border", borderColor)}>
-               <Icon size={16} className={textColor} />
-             </div>
+            </div>
+            <div className={cn("p-1 rounded-full border", borderColor)}>
+              <Icon size={16} className={textColor} />
+            </div>
         </div>
       </div>
       
@@ -192,6 +196,9 @@ export default function App() {
   const currentEnemy = CAMPAIGN[fightIndex] || CAMPAIGN[0];
 
   const escapeCost = Math.floor(intent.value * 0.8);
+
+  // Times shuffled this combat (for Prepared Strike buff)
+  const [shuffleCount, setShuffleCount] = useState(0);
 
   // --- Core Game Logic ---
 
@@ -298,7 +305,10 @@ export default function App() {
     // 2. Player Action (If alive)
     if (playerHP > 0) {
         if (activeCard.type === 'ATTACK') {
-            const dmg = activeCard.value;
+            let dmg = activeCard.value;
+            if(activeCard.name === 'Prepared Strike') {
+                dmg += shuffleCount * 5;
+            }
             // Fix: Calculate using closure state to avoid side-effects in setState updater (Strict Mode double-invoke fix)
             const remainingBlock = enemyBlock - dmg;
             
@@ -334,12 +344,25 @@ export default function App() {
     } else {
         setTicks(currentTicks);
     }
-
+  
     const newDeck = [...deck];
     const card = newDeck.shift();
     if (card) newDeck.push(card);
     setDeck(newDeck);
     addToLog("SHUFFLE: Deck cycled.");
+
+    // Increment shuffle count for Prepared Strike buff
+    if( activeCard.name === 'Prepared Strike' )
+    {
+        setShuffleCount(prev => prev + 1);
+        for( let i = 0; i < newDeck.length; i++ )
+        {
+            if( newDeck[i].name === 'Prepared Strike' )
+            {
+                newDeck[i] = { ...newDeck[i], value: newDeck[i].value + 10 };
+            }
+        }
+    }
   };
 
   const handleHold = () => {
@@ -355,8 +378,8 @@ export default function App() {
     }
 
     if (!activeCard && holdCard) {
-       setDeck([holdCard]);
-       setHoldCard(null);
+        setDeck([holdCard]);
+        setHoldCard(null);
     } else if (holdCard) {
       const newDeck = [...deck];
       const currentActive = newDeck.shift()!;
